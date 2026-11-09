@@ -1,0 +1,22 @@
+{% extends 'frontend/base.html' %}
+{% block title %}Кіру — Дүкен{% endblock %}
+{% block body %}
+<main class="login">
+  <form method="post" class="card login-card">
+    {% csrf_token %}
+    <h1>Дүкен</h1>
+    <p class="muted">Касса, түгендеу және есептер</p>
+    {% if form.errors %}
+      <div class="alert alert-error">Логин немесе құпия сөз қате.</div>
+    {% endif %}
+    <label>Логин
+      <input name="username" autocomplete="username" required autofocus value="{{ form.username.value|default:'' }}">
+    </label>
+    <label>Құпия сөз
+      <input name="password" type="password" autocomplete="current-password" required>
+    </label>
+    <input type="hidden" name="next" value="{{ next }}">
+    <button class="btn btn-primary" type="submit">Кіру</button>
+  </form>
+</main>
+{% endblock %}

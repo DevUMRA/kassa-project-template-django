@@ -1,0 +1,19 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+{% block body %}
+<header class="topbar">
+  <div class="brand">Дүкен</div>
+  <nav id="tabs" class="tabs" aria-label="Бөлімдер"></nav>
+  <div class="user">
+    <span id="user-info" class="muted"></span>
+    <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button class="btn btn-link" type="submit">Шығу</button>
+    </form>
+  </div>
+</header>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<main id="view" class="view"><p class="muted">Жүктелуде…</p></main>
+<script>window.CSRF_TOKEN = "{{ csrf_token }}";</script>
+<script src="{% static 'frontend/app.js' %}"></script>
+{% endblock %}

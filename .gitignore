@@ -1,0 +1,17 @@
+# Құпиялар
+.env
+
+# Python
+venv/
+__pycache__/
+*.py[cod]
+
+# Дерекқор көшірмелері (құпия сөз хэштері, токендер бар)
+backups/
+
+# collectstatic нәтижесі
+staticfiles/
+
+# IDE
+.idea/
+.vscode/
