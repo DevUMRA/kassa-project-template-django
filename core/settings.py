@@ -240,6 +240,8 @@ if not DEBUG:
     if env_bool('DJANGO_BEHIND_HTTPS_PROXY', True):
         SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = env_bool('DJANGO_SECURE_SSL_REDIRECT', True)
+    # Healthcheck контейнер ішінен HTTP арқылы келеді (Docker, Coolify) — HTTPS-ке бағыттамаймыз
+    SECURE_REDIRECT_EXEMPT = [r'^api/health/$']
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     # HSTS: алдымен аз мәнмен (мысалы 3600) тексеріп, кейін 31536000-ға көтеріңіз

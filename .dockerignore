@@ -1,0 +1,12 @@
+.git
+.github
+.env
+venv
+.venv
+__pycache__
+*.py[cod]
+backups
+staticfiles
+.idea
+.vscode
+docker-compose*.yml

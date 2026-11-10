@@ -1,0 +1,28 @@
+# Qoldanba песочница манифесі (v1). Сипаттамасы: TEMPLATE.md, 3-бөлім.
+# Платформа әрқашан береді: PORT, DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD.
+version: 1
+
+stack: django
+
+app:
+  port: 8000
+  healthcheck: /api/health/
+  # Бір команда үшін ұсынылатын шектеулер
+  resources:
+    memory: 512m
+    cpus: "0.5"
+
+database:
+  engine: postgres
+  version: "17"
+
+env:
+  DJANGO_SECRET_KEY: {generate: secret}
+  # localhost — Coolify healthcheck-і контейнер ішінен келеді
+  DJANGO_ALLOWED_HOSTS: {value: "${APP_HOST},localhost,127.0.0.1"}
+  DJANGO_CSRF_TRUSTED_ORIGINS: {value: "https://${APP_HOST}"}
+  DJANGO_TIME_ZONE: {value: Asia/Almaty}
+  DJANGO_LANGUAGE_CODE: {value: kk}
+  # Команданың алғашқы әкімшісі (рөлі MANAGER); құпия сөзді команда платформадан көреді
+  DJANGO_SUPERUSER_USERNAME: {value: admin}
+  DJANGO_SUPERUSER_PASSWORD: {generate: password, show_to_team: true}
