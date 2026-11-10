@@ -45,6 +45,12 @@ jobs:
           python-version: "3.13"
           cache: pip
       - run: pip install -r requirements.txt
+      # backup_db тесті үшін: pg_dump нұсқасы серверден (17) ескі болмауы тиіс
+      - name: PostgreSQL 17 клиенті (pg_dump / pg_restore)
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q postgresql-client-17
+          echo "BACKUP_PG_BIN=/usr/lib/postgresql/17/bin" >> "$GITHUB_ENV"
       - name: Миграциялар толық әрі жаңа ма
         run: python manage.py makemigrations --check --dry-run
       - run: python manage.py test --noinput
