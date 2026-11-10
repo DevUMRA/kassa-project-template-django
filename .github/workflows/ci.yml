@@ -48,7 +48,9 @@ jobs:
       # backup_db тесті үшін: pg_dump нұсқасы серверден (17) ескі болмауы тиіс
       - name: PostgreSQL 17 клиенті (pg_dump / pg_restore)
         run: |
-          sudo apt-get update -q
+          # Ресми PostgreSQL apt репозиторийі (PGDG) — Ubuntu-да тек 16 нұсқасы бар
+          sudo apt-get install -y -q postgresql-common
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
           sudo apt-get install -y -q postgresql-client-17
           echo "BACKUP_PG_BIN=/usr/lib/postgresql/17/bin" >> "$GITHUB_ENV"
       - name: Миграциялар толық әрі жаңа ма
