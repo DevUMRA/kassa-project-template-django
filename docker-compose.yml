@@ -1,0 +1,47 @@
+# Жергілікті әзірлеу және CI smoke-тест: `docker compose up --build`
+# → http://localhost:8000  (әкімші: admin / admin-local, тек жергілікті)
+# Production/песочницада бұл файл қолданылмайды: дерекқор мен айнымалыларды платформа береді.
+
+services:
+  app:
+    build: .
+    image: ${APP_IMAGE:-kassa-app:local}
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-store_db}
+      DB_USER: ${DB_USER:-store_app}
+      DB_PASSWORD: ${DB_PASSWORD:-store-local}
+      # Тек жергілікті әзірлеуге арналған мәндер
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-local-dev-only-change-me}
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+      DJANGO_CSRF_TRUSTED_ORIGINS: http://localhost:${APP_PORT:-8000}
+      # Жергілікті HTTP: HTTPS-ке бағыттау мен secure cookie өшірулі
+      DJANGO_SECURE_SSL_REDIRECT: "False"
+      DJANGO_BEHIND_HTTPS_PROXY: "False"
+      DJANGO_TIME_ZONE: Asia/Almaty
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD:-admin-local}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${DB_NAME:-store_db}
+      POSTGRES_USER: ${DB_USER:-store_app}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-store-local}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:

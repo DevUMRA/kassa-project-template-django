@@ -1,5 +1,22 @@
 # Деплой
 
+## Docker (Qoldanba песочницасы және жергілікті әзірлеу)
+
+```bash
+docker compose up --build
+```
+
+→ http://localhost:8000 (әкімші: `admin` / `admin-local` — тек жергілікті). Миграциялар мен статика
+контейнер іске қосылғанда өздігінен орындалады, тексеру: `curl http://localhost:8000/api/health/`.
+
+Qoldanba песочницасында қолданба `Dockerfile` бойынша жиналады, дерекқор мен айнымалыларды платформа
+береді (`qoldanba.yaml`), `main`-ге әр merge — жаңа деплой. Толығырақ: [TEMPLATE.md](TEMPLATE.md).
+Дерекқордың резервтік көшірмесін песочницада платформа жасайды (`backup_db` контейнерде қолданылмайды).
+
+Төменде — Docker-сіз, жеке серверге (Windows/Linux) орнату.
+
+## Docker-сіз орнату
+
 Схема: **reverse proxy (HTTPS)** → **waitress** (`serve.py`, 127.0.0.1:8000) → Django → PostgreSQL.
 Статиканы (админ, Swagger) қолданбаның өзі береді (whitenoise), бөлек баптау керек емес.
 
